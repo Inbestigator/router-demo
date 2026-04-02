@@ -1,0 +1,25 @@
+{
+  "name": "dressed-router",
+  "private": true,
+  "type": "module",
+  "imports": {
+    "#/*": "./src/*"
+  },
+  "scripts": {
+    "checks": "biome check --write"
+  },
+  "dependencies": {
+    "@dressed/react": "^1.8.5-canary.2",
+    "@tanstack/react-query": "^5.96.1",
+    "dressed": "^2.0.0-canary.5.1",
+    "jotai": "^2.19.0",
+    "react": "^19.2.4",
+    "react-router": "^7.13.2"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.10",
+    "@types/node": "^25.5.0",
+    "@types/react": "^19.2.14",
+    "typescript": "^6.0.2"
+  }
+}
