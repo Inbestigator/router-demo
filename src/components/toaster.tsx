@@ -1,8 +1,9 @@
 import { ActionRow, Button } from "@dressed/react";
 import { useAtomValue } from "jotai";
-import { $toasts } from "#/state";
+import { useSession } from "#/providers";
 
 export default function Toaster() {
+  const { $toasts } = useSession();
   const toasts = useAtomValue($toasts);
   if (!toasts.length) return null;
   return (

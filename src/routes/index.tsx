@@ -6,12 +6,13 @@ import { useSearchParams } from "react-router";
 import Link from "#/components/link";
 import { PaginationRow } from "#/components/pagination-row";
 import { ProductCartButton } from "#/components/products";
-import { $cart } from "#/state";
+import { useSession } from "#/providers";
 import type { ProductsRes } from "../types";
 
 const LIMIT = 3;
 
 export function IndexPage() {
+  const { $cart } = useSession();
   const [searchParams] = useSearchParams();
   const page = Number(searchParams.get("p") || 1);
   const cart = useAtomValue($cart);

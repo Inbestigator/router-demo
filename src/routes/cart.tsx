@@ -1,18 +1,18 @@
 import { Button, Section, Separator } from "@dressed/react";
-import { useAtom, useSetAtom } from "jotai";
+import { useAtom } from "jotai";
 import { useMemo, useTransition } from "react";
 import { useNavigate } from "react-router";
 import Link from "#/components/link";
 import { ProductCartButton } from "#/components/products";
-import { $cart, $toast } from "#/state";
+import { useSession } from "#/providers";
 
 const BackButton = () => <Link to={-1} label="Back" style="Secondary" />;
 
 export function CartPage() {
+  const { $cart, toast } = useSession();
   const [cart, setCart] = useAtom($cart);
   const [isPending, startTransition] = useTransition();
   const subtotal = useMemo(() => cart.reduce((p, c) => c.price + p, 0), [cart]);
-  const toast = useSetAtom($toast);
   const navigate = useNavigate();
   return (
     <>

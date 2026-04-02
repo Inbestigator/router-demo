@@ -1,11 +1,11 @@
 import { Button } from "@dressed/react";
-import { useAtom, useSetAtom } from "jotai";
-import { $cart, $toast } from "#/state";
+import { useAtom } from "jotai";
+import { useSession } from "#/providers";
 import type { Product } from "#/types";
 
 export function ProductCartButton({ product }: Readonly<Partial<Parameters<typeof Button>[0]> & { product: Product }>) {
+  const { $cart, toast } = useSession();
   const [cart, setCart] = useAtom($cart);
-  const toast = useSetAtom($toast);
   const isInCart = cart.some((c) => c.id === product.id);
   return (
     <Button
