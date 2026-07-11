@@ -1,30 +1,30 @@
-import { patternToRegex } from "@dressed/matcher";
-import type { CommandInteraction, MessageComponentInteraction } from "@dressed/react";
-import { patchInteraction } from "@dressed/react";
+import { type Params, patternToRegex } from "@dressed/matcher";
+import { type ComponentInteraction, patchInteraction } from "@dressed/react";
 import { createCallbackHandler, pattern } from "@dressed/react/callbacks";
+import type { CommandInteraction } from "dressed";
 import { createServer } from "dressed/server";
 import Providers from "./providers";
 
+const callbackHandler = createCallbackHandler({
+  default: (i: ComponentInteraction) => i.reply("Unknown handler", { ephemeral: true }),
+});
+
 createServer(
-  [
-    {
-      name: "shop",
-      data: undefined,
-      exports: { default: (interaction: CommandInteraction) => interaction.reply(<Providers />, { ephemeral: true }) },
+  {
+    shop: {
+      default: (interaction: CommandInteraction) =>
+        patchInteraction(interaction).reply(<Providers />, { ephemeral: true }),
     },
-  ],
-  [
-    {
-      name: "callback",
-      data: { regex: patternToRegex(pattern).source, category: "buttons", score: 0 },
-      exports: {
-        default: createCallbackHandler({
-          default: (i: MessageComponentInteraction) => i.reply("Unknown handler", { ephemeral: true }),
-        }),
-        pattern,
+  },
+  {},
+  {},
+  {
+    hooks: {
+      onUnknownInteraction(i) {
+        if (i.type !== 3 && i.type !== 5) return console.error("Unknown interaction", i);
+        const args = patternToRegex(pattern).exec(i.data.custom_id)?.groups as Params<typeof pattern>;
+        return callbackHandler(i as Parameters<typeof callbackHandler>[0], args);
       },
     },
-  ],
-  [],
-  { port: 3000, hooks: { onBeforeCommand: (i) => [patchInteraction(i)] } },
+  },
 );
